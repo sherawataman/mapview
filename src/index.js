@@ -5,11 +5,12 @@ window.CESIUM_BASE_URL = '/';
 var Cesium = require('cesium/Cesium');
 require('./css/main.css');
 require('cesium/Widgets/widgets.css');
+require('./chart/script');
 
 // import EntityCollection from 'cesium/Source/DataSources/EntityCollection';
 // require('axios');
-// var logo = require('./images/co.png');
-import logo from './images/red.png'
+var logo = '/src/images/red.png'
+
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxZDk3ODc3Yy0yMTk5LTQ1NjAtOTY5Zi1kNmRiOGMwNzBmMmIiLCJpZCI6Njc4MzIsImlhdCI6MTYzMjExODUyMH0.9dINseSzSb6QPkBf7GCYXduWES88R0d_Q9sYCTNeFaE';
 // Initialize the Cesium Viewer in the HTML element with the "cesiumContainer" ID.
 var viewer = new Cesium.Viewer('cesiumContainer', {
@@ -20,28 +21,36 @@ var viewer = new Cesium.Viewer('cesiumContainer', {
   timeline: false
 });
 var scene = viewer.scene;
-var canvas = viewer.scene.canvas;
+var camera = new Cesium.Camera(scene);
 if (!scene.pickPositionSupported) {
   window.alert("This browser does not support pickPosition.");
 }
 
 var dataSource = new Cesium.CustomDataSource('mydata')
 const api_url = "https://disease.sh/v3/covid-19/jhucsse"
+const world_api = "https://disease.sh/v3/covid-19/all"
 let data;
-async function getapi(url) {
+
+async function getapi(url, data) {
     
   try {
      // Storing response
-     const response = await fetch(url, data);
+     const response = await fetch(url);
     
      // Storing data in form of JSON
      data = await response.json();
      
+     console.log("here")
      console.log("main",data);
      //  cluster(dataSource);
      addMarkerBillboards(data, dataSource);
      cluster(dataSource);
      polygonAdd();
+     let ele = document.getElementById('sel');
+  for (let i = 0; i <=data.length; i++) {
+    ele.innerHTML = ele.innerHTML + '<option value="' + data[i].country + '">' + data[i].country + '</option>'
+  }
+    //  populateSelect(data);
     } catch (error) {
       console.log('error',error)
     }
@@ -49,8 +58,33 @@ async function getapi(url) {
     
     
   }
+async function getworldapi(url){
+  try {
+    const response = await fetch(url);
+    let data2 = await response.json();
+    document.getElementById('total cases').innerHTML = data2.cases
+    document.getElementById('deaths').innerHTML = data2.deaths
+    document.getElementById('recovered').innerHTML = data2.recovered
+    document.getElementById('active').innerHTML = data2.active
+    document.getElementById('critical').innerHTML = data2.critical
+    // console.log(data2); 
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+var myVar = setInterval(myTimer, 600000);
+
+function myTimer() {
+  var d = new Date();
+  var t = d.toLocaleTimeString();
+  document.getElementById("update").innerHTML = t;
+}
   // Calling that async function
   getapi(api_url);
+  getworldapi(world_api)
+  viewer.camera.flyTo({
+    destination : Cesium.Cartesian3.fromDegrees(77.10898, 28.646519, 8500000.0)
+  });
 // 
 function addMarkerBillboards(data, dataSource) {
     // Sandcastle.declare(addMarkerBillboards);
@@ -69,7 +103,7 @@ function addMarkerBillboards(data, dataSource) {
             '<tr><th>' + "Deaths" + '</th><td>' + data[i].stats.deaths + '</td></tr>' +
             '<tr><th>' + "Recovered Cases" + '</th><td>' + data[i].stats.recovered + '</td></tr>' +
             '</tbody></table>';
-          if (data[i].stats.confirmed > 500000){
+          if (Number(data[i].stats.confirmed) > 500000){
             
             entity = dataSource.entities.add({
               name: data[i].country,
@@ -84,7 +118,7 @@ function addMarkerBillboards(data, dataSource) {
               position: Cesium.Cartesian3.fromDegrees(log, lat),
               billboard: {
                 image: logo,
-                scale: 0.05,
+                scale: 0.04,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
               },
               description: 'Country:' + data[i].country
@@ -105,8 +139,8 @@ function addMarkerBillboards(data, dataSource) {
               entity.description = description;
               entity.label.show = false;
           }
-          else if (data[i].stats.confirmed >100000 && data[i].stats.confirmed < 500000) {
-            var label = data[i].province + ", "+ data[i].country
+          else if (Number(data[i].stats.confirmed) >100000 && Number(data[i].stats.confirmed) < 500000) {
+            
             entity = dataSource.entities.add({
               position: Cesium.Cartesian3.fromDegrees(log, lat),
               label: {
@@ -119,7 +153,7 @@ function addMarkerBillboards(data, dataSource) {
               },
               billboard: {
                 image: logo,
-                scale: 0.05,
+                scale: 0.04,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
               },
               description: 'Country:' + data[i].country
@@ -141,7 +175,7 @@ function addMarkerBillboards(data, dataSource) {
               entity.label.show = false;
 
           }
-          else if (data[i].stats.confirmed >50000 && data[i].stats.confirmed < 100000) {
+          else if (Number(data[i].stats.confirmed) >50000 && Number(data[i].stats.confirmed) < 100000) {
             entity = dataSource.entities.add({
               position: Cesium.Cartesian3.fromDegrees(log, lat),
               label: {
@@ -154,7 +188,7 @@ function addMarkerBillboards(data, dataSource) {
               },
               billboard: {
                 image: logo,
-                scale: 0.05,
+                scale: 0.04,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
               },
               description: 'Country:' + data[i].country
@@ -172,7 +206,7 @@ function addMarkerBillboards(data, dataSource) {
               entity.label.show = false;
               
           }
-          else if (data[i].stats.confirmed <= 50000) {
+          else if (Number(data[i].stats.confirmed) <= 50000) {
             
             entity = dataSource.entities.add({
               position: Cesium.Cartesian3.fromDegrees(log, lat),
@@ -186,7 +220,7 @@ function addMarkerBillboards(data, dataSource) {
               },
               billboard: {
                 image: logo,
-                scale: 0.01,
+                scale: 0.04,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
               },
               ellipse : {
@@ -214,15 +248,12 @@ function addMarkerBillboards(data, dataSource) {
         // console.log("3", dataSource)
         
         viewer.dataSources.add(dataSource);
-        var source = viewer.dataSources.getByName(dataSource._name)
-        // console.log("4", source)
-        var entity1 = dataSource.entities.values
-        // console.log('okay', entity1)
+       
       
     }
     
 
-  console.log("yeah am working")
+  // console.log("yeah am working")
   // var canvas =
   var previousPickedEntity = undefined;
   var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
@@ -233,7 +264,7 @@ function addMarkerBillboards(data, dataSource) {
     var pickedEntity = (Cesium.defined(pickedPrimitive)) ? pickedPrimitive.id : undefined;
     // Unhighlighted
     if (Cesium.defined(previousPickedEntity)) {
-      previousPickedEntity.billboard.scale = 0.01;
+      previousPickedEntity.billboard.scale = 0.04;
       // previousPickedEntity.billboard.color = Cesium.Color.WHITE;
       previousPickedEntity.ellipse.semiMinorAxis = 250.0;
       previousPickedEntity.ellipse.semiMajorAxis = 400.0;
@@ -241,7 +272,7 @@ function addMarkerBillboards(data, dataSource) {
   }
     // Highlight the currently picked entity
     if (Cesium.defined(pickedEntity) && Cesium.defined(pickedEntity.billboard)) {
-        pickedEntity.billboard.scale = 0.2;
+        pickedEntity.billboard.scale = 0.1;
         // pickedEntity.billboard.color = Cesium.Color.ORANGERED;
         // pickedEntity.ellipse.distanceDisplayCondition = false;
         pickedEntity.ellipse.semiMinorAxis = 250000.0;
@@ -256,7 +287,7 @@ function addMarkerBillboards(data, dataSource) {
 
 cluster(dataSource);
 function cluster(dataSource) {
-  var pixelRange = 50;
+  var pixelRange = 60;
   var minimumClusterSize = 2;
   var enabled = true;
               
@@ -276,13 +307,20 @@ function cluster(dataSource) {
       removeListener = dataSource.clustering.clusterEvent.addEventListener(
         function (entities, cluster) {
           cluster.label.show = false;
-          cluster.billboard.show = true;
-          cluster.billboard.id = cluster.label.id;
-          cluster.billboard.horizontalOrigin =
+          cluster.point.show = true;
+          cluster.point.id = cluster.label.id;
+          cluster.point.horizontalOrigin =
           Cesium.HorizontalOrigin.LEFT;
-          cluster.billboard.image = url
-          cluster.billboard.color = new Cesium.Color(1.0, 1.0, 1.0, 0.5)
-          cluster.billboard.scale = 0.2
+          // cluster.billboard.verticalOrigin =
+          // Cesium.VerticalOrigin.BOTTOM;
+          // cluster.billboard.image = url
+          cluster.point.color = Cesium.Color.RED.withAlpha(-0.5)
+          
+          // cluster.point.color = new Cesium.Color(1.0, 1.0, 1.0, 0.5)
+          cluster.point.pixelSize = 50.0
+          // cluster.point.scale = 100.0
+          cluster.point.heightReference =  Cesium.HeightReference.CLAMP_TO_GROUND;
+          
       }
       );
     }
@@ -329,3 +367,14 @@ function cluster(dataSource) {
                 
                 
               };
+function populateSelect(data) {
+  let ele = document.getElementById('sel');
+  console.log("here")
+  for (let i = 0; i <=data.length; i++) {
+    ele.innerHTML = ele.innerHTML + '<option value="' + data[i].country + '">' + data[i].country + '</option>'
+  }
+}
+
+
+              
+              

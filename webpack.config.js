@@ -68,10 +68,12 @@ module.exports = {
         // development server options
         devServer: {
             static: path.join(__dirname, "dist"),
-            port: '8080',
-            allowedHosts: [
-                '.amazonaws.com'
-            ]        }
+            // port: '8080',
+            // allowedHosts: [
+            //     '.amazonaws.com'
+            // ]        
+        }
+
           
         
 };

@@ -5,14 +5,71 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
     <title>Queppelin Dashboard</title>
   </head>
-  <body>
-    <div id="cesiumContainer"></div>
-    <div style="display:flex; position:absolute; top: 10px; left: 10px; flex-direction: row;">
-      <!-- <img src="" style="margin: 10px; height: 50;"/> -->
-      <img src="/src/images/Queppelin.png" style=" height: 50; width: 200"/>
-      <button id="inquiry" type="menu" class="cesium button">Inquiry</button>
+  <body> 
+    <div style="display: flexbox; flex-direction: column;">
+      <!-- Globe -->
+      <div id="cesiumContainer"></div>
+      <!-- images -->
+      <div style="display:flex; position:absolute; top: 10px; left: 10px; flex-direction: row;">
+        <!-- <img src="" style="height:40, width:100,  padding:5, alignSelf: 'left', marginLeft: '0.8rem'; marginTop:'0.5rem'; borderRadius: 30;"/> -->
+        <img src="/src/images/Queppelin.png" style="height: 30; width: 90; padding: 5px; border-radius: 30;"/>
+        <!-- <button id="inquiry" type="menu" class="cesium button">Inquiry</button> -->
+      </div>
+      <!-- end -->
+      <!-- cases table -->
+      <div id="information-box">
+        <div class="table1" id="Cases">
+          <h3>Total Cases</h3>
+          <h4 id="total cases" style="color: blue;"></h4>
+        </div>
+        <div class="table1" id="Deaths">
+          <h3>Deaths</h3>
+          <h4 id="deaths" style="color: red;"></h4>
+        </div>
+        <div class="table1" id="Recovered">
+          <h3>Recovered</h3>
+          <h4 id="recovered" style="color: lime;"></h4>
+        </div>
+        <div class="table1" id="Active">
+          <h3>Active Cases</h3>
+          <h4 id="active" style="color: yellowgreen;"></h4>
+        </div>
+        <div class="table1" id="Critical">
+          <h3>Critical</h3>
+          <h4 id="critical"></h4>
+        </div>
+        <div class="table1" id="Update">
+          <h3>Last Update</h3>
+          <h4 id="update" style="color: aqua;"></h4>
+        </div>
+      </div>
+      <!-- end -->
+      <!-- chart -->
+      <select id="sel" onchange="show(this)">
+        <option value="World" selected>World</option>
+        </select>
+      <div id="chart" style="position: relative; height:40vh; width:80vw">
+        <canvas id="myChart" class="myChart" "></canvas>
+        <canvas id="myChart2" class="myChart"></canvas>
+        <canvas id="myChart3" class="myChart"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="script.js"></script>
+
+      </div>
     </div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="select2.min.js"></script>
+    <script>
+    $("#country").select2( {
+      placeholder: "Select Country",
+      allowClear: true
+      } );
+    </script> -->
   </body>
 </html>

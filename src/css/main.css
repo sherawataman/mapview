@@ -3,5 +3,36 @@ html, body, #cesiumContainer {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
 }
+#information-box {
+    display: inline-flex;
+    border: 2px solid white;
+    margin-top: -50px;
+    margin-left: 25%;
+    position:absolute;
+    background-color: aliceblue;
+    border-radius: 10px;
+    box-shadow: 5px 10px 8px 10px #888888;
+    
+}
+.table1 {
+    margin: 20px;
+    text-align: center;
+    font-family:sans-serif;
+}
+#chart{
+    margin-top: 20%;
+    display: flex;
+    flex-direction: row;
+    width: '100vw';
+
+}
+.myChart{
+    height: 900px;
+    width: 450px;
+    padding: 20px;
+    padding-left: 50px;
+}
+
+

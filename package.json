@@ -26,6 +26,7 @@
   "dependencies": {
     "axios": "^0.21.4",
     "cesium-heatmap": "0.0.4",
+    "chart.js": "^3.5.1",
     "es6": "0.0.7",
     "nodemon": "^2.0.12"
   }
