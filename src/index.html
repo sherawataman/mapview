@@ -49,18 +49,27 @@
         </div>
       </div>
       <!-- end -->
-      <!-- chart -->
-      <select id="sel" onchange="show(this)">
-        <option value="World" selected>World</option>
-        </select>
-      <div id="chart" style="position: relative; height:40vh; width:80vw">
-        <canvas id="myChart" class="myChart" "></canvas>
-        <canvas id="myChart2" class="myChart"></canvas>
-        <canvas id="myChart3" class="myChart"></canvas>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="script.js"></script>
-
-      </div>
+      <div id="select-container">
+        <select id="sel" >
+          <option value="" >Select a Country</option>
+          <option value="World"  selected>World</option>
+          </select>
+        </div>
+      <!-- chart -->    
+          <div id="chart" style="position: relative; height:40vh; width:80vw">
+              <div>
+                <canvas id="myChart" class="myChart" "></canvas>
+              </div>
+              <div>
+                <canvas id="myChart2" class="myChart"></canvas>
+              </div>
+              <div>
+                <canvas id="myChart3" class="myChart"></canvas>
+              </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="script.js"></script>
+            
+          </div>
     </div>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
     </script>

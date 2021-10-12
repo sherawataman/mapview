@@ -40,16 +40,13 @@ async function getapi(url, data) {
      // Storing data in form of JSON
      data = await response.json();
      
-     console.log("here")
+     
      console.log("main",data);
      //  cluster(dataSource);
+     populateSelect(data);
      addMarkerBillboards(data, dataSource);
      cluster(dataSource);
      polygonAdd();
-     let ele = document.getElementById('sel');
-  for (let i = 0; i <=data.length; i++) {
-    ele.innerHTML = ele.innerHTML + '<option value="' + data[i].country + '">' + data[i].country + '</option>'
-  }
     //  populateSelect(data);
     } catch (error) {
       console.log('error',error)
@@ -67,7 +64,8 @@ async function getworldapi(url){
     document.getElementById('recovered').innerHTML = data2.recovered
     document.getElementById('active').innerHTML = data2.active
     document.getElementById('critical').innerHTML = data2.critical
-    // console.log(data2); 
+    // console.log(data2);
+
   } catch (error) {
     console.log('error', error)
   }
@@ -368,11 +366,21 @@ function cluster(dataSource) {
                 
               };
 function populateSelect(data) {
+  console.log("here", data[0].country)
+  let i;
   let ele = document.getElementById('sel');
-  console.log("here")
-  for (let i = 0; i <=data.length; i++) {
-    ele.innerHTML = ele.innerHTML + '<option value="' + data[i].country + '">' + data[i].country + '</option>'
+  let countries = []
+  for (i = 0; i <=data.length; i++) {
+    if(data[i]?.country === data[i-1]?.country){
+      continue
+    } else {
+      countries.push(data[i]?.country)
+      ele.innerHTML = ele.innerHTML + '<option value="' + data[i]?.country + '">' + data[i]?.country + '</option>'
+      
+    }
   }
+  countries.pop()
+  console.log(countries)
 }
 
 

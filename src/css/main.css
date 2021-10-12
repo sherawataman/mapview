@@ -35,4 +35,6 @@ html, body, #cesiumContainer {
     padding-left: 50px;
 }
 
-
+#select-container {
+    padding-top: 50px;
+}
