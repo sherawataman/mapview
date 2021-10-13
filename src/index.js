@@ -14,9 +14,9 @@ var logo = '/src/images/red.png'
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxZDk3ODc3Yy0yMTk5LTQ1NjAtOTY5Zi1kNmRiOGMwNzBmMmIiLCJpZCI6Njc4MzIsImlhdCI6MTYzMjExODUyMH0.9dINseSzSb6QPkBf7GCYXduWES88R0d_Q9sYCTNeFaE';
 // Initialize the Cesium Viewer in the HTML element with the "cesiumContainer" ID.
 var viewer = new Cesium.Viewer('cesiumContainer', {
-  imageryProvider: Cesium.createWorldImagery({
-    style: Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS,
-  }),
+  // imageryProvider: Cesium.createWorldImagery({
+  //   style: Cesium.IonWorldImageryStyle.AERIAL_WITH_LABELS,
+  // }),
   animation: false,
   timeline: false
 });
@@ -65,6 +65,12 @@ async function getworldapi(url){
     document.getElementById('active').innerHTML = data2.active
     document.getElementById('critical').innerHTML = data2.critical
     // console.log(data2);
+    setTimeout(function() {
+      viewer.camera.flyTo({
+        destination : Cesium.Cartesian3.fromDegrees(77.10898, 28.646519, 8500000.0)
+      })
+    }, 2000)
+    
 
   } catch (error) {
     console.log('error', error)
@@ -80,10 +86,9 @@ function myTimer() {
   // Calling that async function
   getapi(api_url);
   getworldapi(world_api)
-  viewer.camera.flyTo({
-    destination : Cesium.Cartesian3.fromDegrees(77.10898, 28.646519, 8500000.0)
-  });
+
 // 
+
 function addMarkerBillboards(data, dataSource) {
     // Sandcastle.declare(addMarkerBillboards);
     // console.log(data)
@@ -114,11 +119,18 @@ function addMarkerBillboards(data, dataSource) {
                 pixelOffset : new Cesium.Cartesian2(0, 50)
               },
               position: Cesium.Cartesian3.fromDegrees(log, lat),
-              billboard: {
-                image: logo,
-                scale: 0.04,
+              point : {
+                pixelSize : 25,
+                color : Cesium.Color.RED,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
-              },
+                // outlineColor : Cesium.Color.WHITE,
+                // outlineWidth : 2
+            },
+              // billboard: {
+              //   image: logo,
+              //   scale: 0.04,
+              //   scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
+              // },
               description: 'Country:' + data[i].country
               + '\nstate:' + data[i].province
               + '\n\nConfirmed Cases:' + data[i].stats.confirmed
@@ -149,11 +161,18 @@ function addMarkerBillboards(data, dataSource) {
                 verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
               pixelOffset : new Cesium.Cartesian2(0, 50)
               },
-              billboard: {
-                image: logo,
-                scale: 0.04,
+              point : {
+                pixelSize : 20,
+                color : Cesium.Color.ORANGE,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
-              },
+                // outlineColor : Cesium.Color.WHITE,
+                // outlineWidth : 2
+            },
+              // billboard: {
+              //   image: logo,
+              //   scale: 0.04,
+              //   scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
+              // },
               description: 'Country:' + data[i].country
               + '\nstate:' + data[i].province
               + '\n\nConfirmed Cases:' + data[i].stats.confirmed
@@ -184,11 +203,18 @@ function addMarkerBillboards(data, dataSource) {
                 verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset : new Cesium.Cartesian2(0, 50)
               },
-              billboard: {
-                image: logo,
-                scale: 0.04,
+              point : {
+                pixelSize : 15,
+                color : Cesium.Color.YELLOW,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
-              },
+                // outlineColor : Cesium.Color.WHITE,
+                // outlineWidth : 2
+            },
+              // billboard: {
+              //   image: logo,
+              //   scale: 0.04,
+              //   scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
+              // },
               description: 'Country:' + data[i].country
               + '\nstate:' + data[i].province
               + '\n\nConfirmed Cases:' + data[i].stats.confirmed
@@ -216,11 +242,18 @@ function addMarkerBillboards(data, dataSource) {
                 verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
                 pixelOffset : new Cesium.Cartesian2(0, 50)
               },
-              billboard: {
-                image: logo,
-                scale: 0.04,
+              point : {
+                pixelSize : 10,
+                color : Cesium.Color.GREEN,
                 scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
-              },
+                // outlineColor : Cesium.Color.WHITE,
+                // outlineWidth : 2
+            },
+              // billboard: {
+              //   image: logo,
+              //   scale: 0.04,
+              //   scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
+              // },
               ellipse : {
                 semiMinorAxis : 25.0,
                 semiMajorAxis : 40.0,
@@ -262,7 +295,8 @@ function addMarkerBillboards(data, dataSource) {
     var pickedEntity = (Cesium.defined(pickedPrimitive)) ? pickedPrimitive.id : undefined;
     // Unhighlighted
     if (Cesium.defined(previousPickedEntity)) {
-      previousPickedEntity.billboard.scale = 0.04;
+      // previousPickedEntity.billboard.scale = 0.04;
+      previousPickedEntity.point.pixelSize = 25;
       // previousPickedEntity.billboard.color = Cesium.Color.WHITE;
       previousPickedEntity.ellipse.semiMinorAxis = 250.0;
       previousPickedEntity.ellipse.semiMajorAxis = 400.0;
@@ -270,7 +304,8 @@ function addMarkerBillboards(data, dataSource) {
   }
     // Highlight the currently picked entity
     if (Cesium.defined(pickedEntity) && Cesium.defined(pickedEntity.billboard)) {
-        pickedEntity.billboard.scale = 0.1;
+        // pickedEntity.billboard.scale = 0.1;
+        pickedEntity.point.pixelSize = 20;
         // pickedEntity.billboard.color = Cesium.Color.ORANGERED;
         // pickedEntity.ellipse.distanceDisplayCondition = false;
         pickedEntity.ellipse.semiMinorAxis = 250000.0;
@@ -383,6 +418,3 @@ function populateSelect(data) {
   console.log(countries)
 }
 
-
-              
-              

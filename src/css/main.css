@@ -1,19 +1,22 @@
 html, body, #cesiumContainer {
+    
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     overflow: visible;
+    background-color: #151B21;
+    
 }
 #information-box {
     display: inline-flex;
-    border: 2px solid white;
+    border: 2px solid #242B31;
     margin-top: -50px;
     margin-left: 25%;
     position:absolute;
-    background-color: aliceblue;
+    background-color: #242B31;
     border-radius: 10px;
-    box-shadow: 5px 10px 8px 10px #888888;
+    box-shadow: 5px 10px 8px 10px black;
     
 }
 .table1 {
@@ -24,17 +27,54 @@ html, body, #cesiumContainer {
 #chart{
     margin-top: 20%;
     display: flex;
-    flex-direction: row;
-    width: '100vw';
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    
+
 
 }
-.myChart{
+/* .myChart{
     height: 900px;
     width: 450px;
     padding: 20px;
     padding-left: 50px;
-}
+} */
 
 #select-container {
-    padding-top: 50px;
+    padding-top: 120px;
+    position: absolute;
+    padding-left: 40%;
 }
+
+.chart-container{
+    width: 80vh;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 5px 10px 8px 10px black;
+    margin: 20px;
+    background-color: #151B21;
+    
+    
+}
+.select-box {
+    cursor: pointer;
+    position : relative;
+    max-width:  20em;
+    margin: 5em auto;
+    width: 100%;
+  }
+  .select,
+  .label {
+    color: #414141;
+    display: block;
+    font: 400 17px/2em 'Source Sans Pro', sans-serif;
+  }
+
+#chart-table {
+    display: flexbox;
+}
+
+
+
+

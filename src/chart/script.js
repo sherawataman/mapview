@@ -101,13 +101,34 @@ function graph(data) {
           }]
         },
         options: {
-        
+          animations: {
+            radius: {
+              duration: 400,
+              easing: 'linear',
+              loop: (context) => context.active
+            }
+          },
+          hoverBackgroundColor: 'yellow',
+          interaction: {
+            mode: 'nearest',
+            intersect: false,
+            axis: 'x'
+          },
           responsive:true,
           scales: {
+            xAxes: [{
+              gridLines: {
+                  display: false
+              }
+          }],
             yAxes: [{
             ticks: {
               stepSize: 1
-            }
+            },
+            gridLines: {
+              display: false
+          }
+
           }],
           y: {
             beginAtZero: true,
@@ -160,9 +181,17 @@ window.chart2 = new Chart(ctx_deaths, {
   options: {
     responsive:true,
       scales: {
+        xAxes: [{
+          gridLines: {
+              color: "rgba(0, 0, 0, 0)",
+          }
+      }],
         yAxes: [{
           ticks: {
-            stepSize: 2
+            stepSize: 1
+          },
+          gridlines: {
+            color: "rgba(0, 0, 0, 0)"
           }
         }],
           y: {
@@ -219,10 +248,18 @@ function graph_vaccine(data){
     options: {
       responsive:true,
         scales: {
+          xAxes: [{
+            gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+            }
+        }],
           yAxes: [{
             ticks: {
               stepSize: 1
-            }
+            },
+            gridLines: {
+              color: "rgba(0, 0, 0, 0)",
+          }
           }],
             y: {
                 beginAtZero: true,
@@ -235,4 +272,19 @@ function graph_vaccine(data){
 //   chart.data.datasets[0].data = dataArr;
   
 //   chart.update();
+}
+function get_table_data(){
+  
+}
+function tableCreate(data, data1) {
+  let table = document.createElement('table');
+  let thead = document.createElement('thead');
+  let tbody = document.createElement('tbody');
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+
+// Adding the entire table to the body tag
+  document.getElementById('table').appendChild(table);
+  
 }
