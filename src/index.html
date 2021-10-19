@@ -18,7 +18,7 @@
       <!-- Globe -->
       <div id="cesiumContainer"></div>
       <!-- images -->
-      <div style="display:flex; position:absolute; top: 10px; left: 10px; flex-direction: row;">
+      <div id="image-container" style="display:flex; position:absolute; top: 10px; left: 10px; flex-direction: row;">
         <!-- <img src="" style="height:40, width:100,  padding:5, alignSelf: 'left', marginLeft: '0.8rem'; marginTop:'0.5rem'; borderRadius: 30;"/> -->
         <img src="/src/images/Queppelin.png" style="height: 30; width: 90; padding: 5px; border-radius: 30;"/>
         <!-- <button id="inquiry" type="menu" class="cesium button">Inquiry</button> -->
@@ -28,7 +28,7 @@
       <div id="information-box">
         <div class="table1" id="Cases">
           <h3>Total Cases</h3>
-          <h4 id="total cases" style="color: blue;"></h4>
+          <h4 id="total cases" style="color: skyblue;"></h4>
         </div>
         <div class="table1" id="Deaths">
           <h3>Deaths</h3>
@@ -66,10 +66,44 @@
         </div>
       <!-- chart&table -->
       <div id="chart-table " class="table-chart-container">
-        <div id="table">
-         
+        <div id="table-container" >
+          <div id="table">
+            <input type="text" id="myInput" onkeypress="myFunction()" placeholder="Search for country...">
+            <script>
+              function myFunction() {
+                // Declare variables
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("myInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("mytable");
+                tr = table.getElementsByTagName("tr");
+                console.log("okay", table)
+              // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                  td = tr[i].getElementsByTagName("td")[1];
+                  if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    // console.log(txtValue)
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                } else {
+                tr[i].style.display = "none";
+                }
+                }
+                }
+              }
+              
+            </script>
+          </div>
         </div>
-        <div id="chart" class="chart-main-container" style="position: relative; height:40vh; width:80vw">
+        <div id="chart" class="chart-main-container" >
+          <div id="form">
+            <select id="sel2">
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+            </select>
+          </div>
+          
           <div class="chart-container">
             <canvas id="myChart" class="myChart" "></canvas>
           </div>

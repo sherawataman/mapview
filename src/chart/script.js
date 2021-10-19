@@ -1,6 +1,8 @@
 // console.log("script is working")
-const graph_world_url = "https://disease.sh/v3/covid-19/historical/all?lastdays=7"
-const graph_vaccine_url = "https://disease.sh/v3/covid-19/vaccine/coverage?lastdays=7&fullData=false"
+const graph_world_url = "https://disease.sh/v3/covid-19/historical/all?lastdays=28"
+const graph_world_url_week = "https://disease.sh/v3/covid-19/historical/all?lastdays=7"
+const graph_vaccine_url = "https://disease.sh/v3/covid-19/vaccine/coverage?lastdays=28&fullData=false"
+const graph_vaccine_url_week = "https://disease.sh/v3/covid-19/vaccine/coverage?lastdays=7&fullData=false"
 
 async function getgraphapi(url) {
     
@@ -11,7 +13,8 @@ async function getgraphapi(url) {
        // Storing data in form of JSON
         var data = await response.json();
         console.log("graph data", data);
-        graph(data)       
+        graph(data)
+               
        
       } catch (error) {
         console.log('error',error)
@@ -43,17 +46,50 @@ async function getgraphapi(url) {
       e.onchange = function() {show(e)};
 function show(e) {
       var country = e.options[e.selectedIndex].text;
+      function period(f){
+          var time = f.options[f.selectedIndex].text;
+          console.log(time)
+          if (time === "Week") {
+          getgraphapi(graph_world_url_week)
+          get_vaccine_api(graph_vaccine_url_week)
+          console.log("hello")
+        } else {
+          getgraphapi(graph_world_url)
+          get_vaccine_api(graph_vaccine_url)
+        }
 
+        }
+      function periodCountry(f){
+        let graph_country_url = `https://disease.sh/v3/covid-19/historical/${country}?lastdays=28`
+        let graph_country_url_week = `https://disease.sh/v3/covid-19/historical/${country}?lastdays=7`
+        let country_vaccine_url = `https://disease.sh/v3/covid-19/vaccine/coverage/countries/${country}?lastdays=28&fullData=false`
+        let country_vaccine_url_week = `https://disease.sh/v3/covid-19/vaccine/coverage/countries/${country}?lastdays=7&fullData=false`
+          var time = f.options[f.selectedIndex].text;
+          console.log(time)
+          if (time === "Week") {
+          getgraphapi(graph_country_url_week)
+          get_vaccine_api(country_vaccine_url_week)
+          console.log("hello")
+        } else {
+          getgraphapi(graph_country_url)
+          get_vaccine_api(country_vaccine_url)
+        }
+
+        }
       if(country === "World") {
-        getgraphapi(graph_world_url)
-        get_vaccine_api(graph_vaccine_url)
+        var f = document.getElementById("sel2")
+        period(f)
+        f.onchange = function () {period(f)}
+        
       }
       else{
-        let graph_country_url = `https://disease.sh/v3/covid-19/historical/${country}?lastdays=7`
-        let country_vaccine_url = `https://disease.sh/v3/covid-19/vaccine/coverage/countries/${country}?lastdays=7&fullData=false`
-        getgraphapi(graph_country_url)
-        get_vaccine_api(country_vaccine_url)
-        console.log("here", graph_country_url)
+        var f = document.getElementById("sel2")
+        periodCountry(f)
+        f.onchange = function () {periodCountry(f)}
+        
+        // getgraphapi(graph_country_url)
+        // get_vaccine_api(country_vaccine_url)
+        // console.log("here", graph_country_url)
       }
 }
       
@@ -92,10 +128,10 @@ function graph(data) {
       data: {
         labels: dateArr,
         datasets: [{
-          label: 'Weekly Cases',
+          label: 'Total Cases',
           data: dataArr,
-          backgroundColor: '#e6e6ff',
-            borderColor: 'blue',
+          backgroundColor: 'blue',
+            borderColor: '#e6e6ff',
             borderWidth: 1,
             fill: true
           }]
@@ -119,11 +155,14 @@ function graph(data) {
             xAxes: [{
               gridLines: {
                   display: false
+              },
+              ticks: {
+                stepSize:2
               }
           }],
             yAxes: [{
             ticks: {
-              stepSize: 1
+              stepSize: 2
             },
             gridLines: {
               display: false
@@ -143,7 +182,7 @@ let deathArr
 if(data.timeline){
   deathKeyArr = Object.keys(data.timeline.deaths);
   deathArr = Object.values(data.timeline.deaths);
-  console.log("yes deaths worling")
+  // console.log("yes deaths worling")
 } else{
   deathKeyArr = Object.keys(data.deaths);
   deathArr = Object.values(data.deaths);
@@ -169,16 +208,29 @@ window.chart2 = new Chart(ctx_deaths, {
   data: {
       labels: deathDateArr,
       datasets: [{
-          label: 'Weekly Deaths',
+          label: 'Total Deaths',
           data: deathArr,
-          backgroundColor: '#ffe6e6',
-          borderColor: '#e60000',
+          backgroundColor: '#e60000',
+          borderColor: '#ffe6e6',
           borderWidth: 1,
           fill: true,
           display: false
       }]
   },
   options: {
+    animations: {
+      radius: {
+        duration: 400,
+        easing: 'linear',
+        loop: (context) => context.active
+      }
+    },
+    hoverBackgroundColor: 'yellow',
+    interaction: {
+      mode: 'nearest',
+      intersect: false,
+      axis: 'x'
+    },
     responsive:true,
       scales: {
         xAxes: [{
@@ -237,15 +289,28 @@ function graph_vaccine(data){
     data: {
         labels: dateArr,
         datasets: [{
-            label: 'Weekly Doses',
+            label: 'Total Doses',
             data: dataArr,
-            backgroundColor: '#e6ffe6',
-            borderColor: '#00ff00',
+            backgroundColor: '#00ff00',
+            borderColor: '#e6ffe6',
             borderWidth: 1,
             fill: true
         }]
     },
     options: {
+      animations: {
+        radius: {
+          duration: 400,
+          easing: 'linear',
+          loop: (context) => context.active
+        }
+      },
+      hoverBackgroundColor: 'yellow',
+      interaction: {
+        mode: 'nearest',
+        intersect: false,
+        axis: 'x'
+      },
       responsive:true,
         scales: {
           xAxes: [{
@@ -273,18 +338,162 @@ function graph_vaccine(data){
   
 //   chart.update();
 }
-function get_table_data(){
-  
+get_table_data()
+async function  get_table_data(){
+  try {
+    const url = "https://disease.sh/v3/covid-19/countries"
+    const response = await fetch(url)
+    let data = await response.json()
+    console.log("table data", data)
+    tableCreate(data)
+    
+  } catch (error) {
+    console.log(error)
+  }
 }
-function tableCreate(data, data1) {
-  let table = document.createElement('table');
-  let thead = document.createElement('thead');
-  let tbody = document.createElement('tbody');
-
-  table.appendChild(thead);
-  table.appendChild(tbody);
-
-// Adding the entire table to the body tag
-  document.getElementById('table').appendChild(table);
+function tableCreate(data) {
+  let mytable = document.querySelector('#table');
+  let headers = [" ",'Country', 'Cases', "Deaths", "Tests"]
+  let table = document.createElement('table')
+  let headerRow = document.createElement('tr');
+  let header;
+  headers.forEach((headerText) => {
+    header = document.createElement('th')
+    // header.onclick = sortTable()
+    let textNode = document.createTextNode(headerText)
+    header.appendChild(textNode);
+    headerRow.appendChild(header);
+  })
+  table.appendChild(headerRow);
   
+
+     console.log(data)
+     let i = 0
+    // Object.assign(details, { flag: '', age: "0" });
+    data.forEach(item => {
+        let row = document.createElement('tr');
+      let cell = document.createElement('td')
+      let cell1 = document.createElement('td')
+      let cell2 = document.createElement('td')
+      let cell3 = document.createElement('td')
+      let cell4 = document.createElement('td')
+      let img = document.createElement('img');
+      // console.log(data[i])
+      let textNode1 = document.createTextNode(item.country)
+      let textNode2 = document.createTextNode(item.cases)
+      let textNode3 = document.createTextNode(item.deaths)
+      let textNode4 = document.createTextNode(item.tests)
+      img.src = item.countryInfo.flag;
+      img.height = "20"
+      img.width ='25'
+      cell.appendChild(img)
+      cell1.appendChild(textNode1)
+      cell2.appendChild(textNode2)
+      cell3.appendChild(textNode3)
+      cell4.appendChild(textNode4)
+      row.appendChild(cell)
+      row.appendChild(cell1)
+      row.appendChild(cell2)
+      row.appendChild(cell3)
+      row.appendChild(cell4)
+      table.appendChild(row)
+    });
+    // for(let i=0; i<data.length;i++) {
+    //   let row = document.createElement('tr');
+    //   let cell = document.createElement('td')
+    //   let img = document.createElement('img');
+    //   // console.log(data[i])
+    //   let textNode1 = document.createTextNode(data[i].country)
+    //   let textNode2 = document.createTextNode(data[i].cases)
+    //   let textNode3 = document.createTextNode(data[i].deaths)
+    //   let textNode4 = document.createTextNode(data[i].tests)
+    //   img.src = data[i].countryInfo.flag;
+    //   img.height = "20"
+    //   img.width ='20'
+    //   cell.appendChild(img)
+    //   cell.appendChild(textNode1)
+    //   cell.appendChild(textNode2)
+    //   cell.appendChild(textNode3)
+    //   cell.appendChild(textNode4)
+    //   row.appendChild(cell)
+    //   table.appendChild(row)
+    // }
+    
+  
+  
+  table.id = "mytable"
+  
+  mytable.appendChild(table);
+  let t = document.getElementById("mytable")
+  let r = t.getElementsByTagName('tr')
+  let h1 = r[0].getElementsByTagName('th')[1];
+  let h2 = r[0].getElementsByTagName('th')[2];
+  let h3 = r[0].getElementsByTagName('th')[3];
+  let h4 = r[0].getElementsByTagName('th')[4];
+  // console.log(h1)
+  // console.log(h2)
+  // console.log(h3)
+  // console.log(h4)
+  h2.onclick = function () {sortTable(2)}
+  h3.onclick = function() {sortTable(3)} 
+  h4.onclick = function() {sortTable(4)}
+  function sortTable(n) {
+    console.log("hello")
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("mytable");
+    switching = true;
+    // console.log(table)
+    //Set the sorting direction to ascending:
+    dir = "asc"; 
+    /*Make a loop that will continue until
+    no switching has been done:*/
+    while (switching) {
+      //start by saying: no switching is done:
+      switching = false;
+      rows = table.getElementsByTagName('tr');
+      // console.log(rows)
+      /*Loop through all table rows (except the
+      first, which contains table headers):*/
+      for (i = 1; i < (rows.length - 1); i++) {
+        //start by saying there should be no switching:
+        shouldSwitch = false;
+        /*Get the two elements you want to compare,
+        one from current row and one from the next:*/
+        x = rows[i].getElementsByTagName("td")[n];
+        y = rows[i + 1].getElementsByTagName("td")[n];
+        // console.log(x.innerHTML)
+        /*check if the two rows should switch place,
+        based on the direction, asc or desc:*/
+        if (dir == "asc") {
+          if (Number(x.innerHTML) > Number(y.innerHTML)) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch= true;
+            break;
+          }
+        } else if (dir == "desc") {
+          if (Number(x.innerHTML) < Number(y.innerHTML)) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        /*If a switch has been marked, make the switch
+        and mark that a switch has been done:*/
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        //Each time a switch is done, increase this count by 1:
+        switchcount ++;      
+      } else {
+        /*If no switching has been done AND the direction is "asc",
+        set the direction to "desc" and run the while loop again.*/
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
+        }
+      }
+    }
+  }
+
 }

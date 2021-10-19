@@ -18,18 +18,23 @@ html, body, #cesiumContainer {
     border-radius: 10px;
     box-shadow: 5px 10px 8px 10px black;
     
+    
 }
 .table1 {
     margin: 20px;
     text-align: center;
     font-family:sans-serif;
+    color: aliceblue;
 }
 #chart{
-    margin-top: 20%;
+    position: absolute;
+    margin-top: 29%;
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    width: 40vw;
     height: 100vh;
+    margin-left: 50%;
+    
     
 
 
@@ -72,9 +77,85 @@ html, body, #cesiumContainer {
   }
 
 #chart-table {
-    display: flexbox;
+    display: flex;
+    flex-direction: column;
+    font-family:sans-serif; 
+
+}
+/* #table-container {
+    
+} */
+#table {
+    padding: 10px;
+    font-family:sans-serif;
+    position: absolute;
+    flex: 1;
+    height: 130vh;
+    width: 30vw;
+    margin-top: 30%;
+    overflow: scroll;
+    overflow-x: hidden;
+    border-radius: 10px;
+    margin-left: 10%;
+    box-shadow: 5px 10px 8px 10px black;
 }
 
 
+th, td {
+    text-align: left;
+    color:aliceblue;
+    padding: 5px;
+    margin: 30px;
 
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+body {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+  }
+  
+  body::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+  #table {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+  }
+  
+  #table::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+  #myInput {
+    background-image: url('https://www.freeiconspng.com/uploads/search-icon-png-2.png'); 
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    background-size: 20px 20px;
+    width: 40%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid  #151B21; 
+    margin-bottom: 12px; /* Add some space below the input */
+    margin-left: 190px;
+    border-radius: 30px;
+    background-color:  #151B21;
+    color: aliceblue;
+    /* height: 2%; */
+  }
+#form{
+  color: aliceblue;
+  font-family: sans-serif;
+  margin-left: 45%;
+}
 
+#Month{
+  margin-left: 50px;
+}
+select{
+  background-color: #151B21;
+  color: aliceblue;
+  border: #151B21;
+  box-shadow: 1px 5px 4px 1px black;
+
+}
