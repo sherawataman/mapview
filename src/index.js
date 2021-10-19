@@ -86,10 +86,14 @@ async function getworldapi(url){
     document.getElementById('critical').innerHTML = data2.critical
     // console.log(data2);
     setTimeout(function() {
+      let load = document.getElementById("loading")
+      load.remove()
+      let main = document.getElementById("maincontainer")
+      main.style.visibility = 'visible';
       viewer.camera.flyTo({
         destination : Cesium.Cartesian3.fromDegrees(77.10898, 28.646519, 8500000.0)
       })
-    }, 2000)
+    }, 9000)
     
 
   } catch (error) {
